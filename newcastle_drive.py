@@ -67,7 +67,7 @@ class NewcastleDrive(object):
         reading = 0
         z = 0
         while z < len(data.ranges):
-            if data.ranges[z] >= 3 and (z > 160) and (z < 920):
+            if data.ranges[z] >= 3 and (z > 180) and (z < 900):
                 gs += 1
                 if gs > lgs:
                     lgs = gs
@@ -81,28 +81,29 @@ class NewcastleDrive(object):
                 x = 0
                 reading = 0
 
-            elif data.ranges[i] <= 3.5 and lgs > 60:
+            elif data.ranges[i] <= 3.5 and lgs > 50:
                 x = 0
                 reading = 0
 
-            elif data.ranges[i] <= 1.9:
+            elif data.ranges[i] <= 1.5:
                 x = 0
                 reading = 0
 
             else:
                 reading += data.ranges[i] - 0.005 * abs(540 - i)
                 x += 1
-                if x > 10 and reading/x**0.25 > readingold:
-                    readingold = reading/x**0.25
+                if x > 40 and reading / x ** 0.3 > readingold:
+                    readingold = reading / x ** 0.3
                     maxindex = i - x / 2
 
-                if lgs < 80 and maxindex > 542:
-                    maxindex += 40
-                if lgs < 80 and maxindex < 538:
-                    maxindex += -40
+                if lgs < 100 and maxindex > 540:
+                    maxindex += 90
+                if lgs < 100 and maxindex < 540:
+                    maxindex += -90
+
+                print(lgs, " ", maxindex, " ", x)
             i += 1
         # print(len(lid))
-        print(lgs)
         return maxindex
 
     def driver(self, angle, velocity):
